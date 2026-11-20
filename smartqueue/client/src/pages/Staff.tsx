@@ -1,0 +1,17 @@
+import {useEffect,useState} from 'react'
+import {Btn,Card,Badge,Stat,Table,Empty,statusTone,run,mins,ago} from '../components/ui'
+import {useDB,me,staffAct,todayT,avgOf} from '../services/store'
+export default function Staff(){const db=useDB(),u=me()!;const [,tick]=useState(0);useEffect(()=>{const i=setInterval(()=>tick(x=>x+1),30000);return()=>clearInterval(i)},[])
+ const svc=db.services.find(s=>s.id===u.serviceId),ctr=db.counters.find(c=>c.id===u.counterId),org=db.orgs.find(o=>o.id===u.orgId)
+ const all=db.tickets.filter(t=>t.orgId===u.orgId&&t.serviceId===u.serviceId&&todayT(t)) // staff only sees their assigned service
+ const cur=all.find(t=>t.staffId===u.id&&(t.status==='CALLED'||t.status==='SERVING')),wt=all.filter(t=>t.status==='WAITING').sort((a,b)=>a.seq-b.seq)
+ const done=all.filter(t=>t.status==='COMPLETED'&&t.staffId===u.id),svcAvg=avgOf(done.filter(t=>t.calledAt&&t.completedAt).map(t=>(t.completedAt!-t.calledAt!)/6e4))
+ const rows=[...(cur?[cur]:[]),...wt]
+ if(!svc)return <Card><Empty icon="⚠️" text="No service assigned yet. Ask your admin to assign a department and counter."/></Card>
+ return <>
+ <Card className="flex flex-wrap justify-between gap-3"><div><h1 className="text-2xl font-bold">Staff Dashboard</h1><div className="text-sm text-slate-500">{u.name} · {org?.name}</div></div><div className="text-sm text-right"><div><b>{svc.name}</b> · {ctr?.name||'No counter'}</div><div className="text-slate-500">{new Date().toLocaleString()}</div></div></Card>
+ <div className="grid grid-cols-2 lg:grid-cols-4 gap-4"><Stat label="Waiting customers" value={wt.length} icon="👥" tone="amber"/><Stat label="Current token" value={cur?.token||'—'} icon="🎟️"/><Stat label="Served today" value={done.length} icon="✅" tone="green"/><Stat label="Avg service time" value={svcAvg?svcAvg+'m':'—'} icon="⏱️" tone="rose"/></div>
+ <Card className="text-center space-y-4"><div className="text-xs tracking-widest text-slate-500">CURRENT TOKEN</div><div className="text-8xl font-black text-indigo-600">{cur?.token||'—'}</div>
+ <div className="grid grid-cols-2 md:grid-cols-4 gap-3"><Btn v="g" className="py-4 text-base" disabled={!!cur||!wt.length} onClick={()=>run(()=>staffAct('next'),'Customer called')}>NEXT CUSTOMER</Btn><Btn className="py-4 text-base" disabled={!cur} onClick={()=>run(()=>staffAct('recall'),'Customer notified again')}>CALL AGAIN</Btn><Btn v="w" className="py-4 text-base" disabled={!cur} onClick={()=>run(()=>staffAct('skip'),'Token skipped')}>SKIP</Btn><Btn v="d" className="py-4 text-base" disabled={!cur} onClick={()=>run(()=>staffAct('complete'),'Token completed')}>COMPLETE</Btn></div></Card>
+ <Card><h2 className="font-bold mb-3">Queue — {svc.name}</h2>{rows.length?<Table head={['Token','Customer','Service','Wait Time','Status','Action']}>{rows.map(t=>{const c=db.users.find(x=>x.id===t.customerId);return <tr key={t.id}><td className="font-mono font-bold">{t.token}</td><td>{c?.name||'Customer'}</td><td>{svc.name}</td><td>{ago(t.createdAt)}</td><td><Badge tone={statusTone(t.status)}>{t.status}</Badge></td>
+ <td className="space-x-2">{t.status==='WAITING'?<Btn className="!py-1" disabled={!!cur} onClick={()=>run(()=>staffAct('call',t.id),'Customer called')}>Call</Btn>:<><Btn v="w" className="!py-1" onClick={()=>run(()=>staffAct('skip'))}>Skip</Btn><Btn v="g" className="!py-1" onClick={()=>run(()=>staffAct('complete'))}>Complete</Btn></>}</td></tr>})}</Table>:<Empty text="Queue is empty 🎉"/>}</Card></>}

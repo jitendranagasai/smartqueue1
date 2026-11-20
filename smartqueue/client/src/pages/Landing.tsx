@@ -1,0 +1,24 @@
+import {Link} from 'react-router-dom'
+import Nav from '../components/Nav'
+import {Btn,Card,Logo} from '../components/ui'
+import {TYPES} from '../services/store'
+export default function Landing(){
+ const steps=[['🔎','Find your organization','Search by name, location, PIN or unique SmartQueue code.'],['🎟️','Join the queue','Pick a service and get your digital token instantly.'],['📡','Track in real time','See your position, people ahead and estimated wait live.'],['✅','Get served','Receive an alert when it is your turn. No standing in line.']]
+ const feats=[['⚡','Real-time updates','Token status, positions and waits update instantly.'],['🏢','Multi-organization','Hospitals, banks, offices, institutes and more on one platform.'],['🔐','Secure by design','Role-based access and strict organization data isolation.'],['📈','Powerful analytics','Peak hours, service times and staff performance.'],['🔔','Smart notifications','Know when your token is approaching.'],['📱','Works everywhere','Fully responsive on desktop, tablet and mobile.']]
+ return <div><Nav/>
+ <section className="bg-gradient-to-br from-indigo-50 via-white to-violet-50"><div className="max-w-6xl mx-auto px-4 py-16 md:py-24 grid md:grid-cols-2 gap-12 items-center">
+ <div className="anim"><span className="px-3 py-1 rounded-full bg-indigo-100 text-indigo-700 text-xs font-semibold">Smart Queue Management</span>
+ <h1 className="text-4xl md:text-5xl font-extrabold mt-4 leading-tight">Skip the Waiting. <span className="text-indigo-600">Manage Your Queue Smartly.</span></h1>
+ <p className="mt-4 text-lg text-slate-600">Find your service provider, join the queue digitally, track your position in real time, and get served without standing in line.</p>
+ <div className="mt-8 flex flex-wrap gap-3"><Link to="/find"><Btn className="px-6 py-3 text-base">Find Your Organization</Btn></Link><a href="#how"><Btn v="s" className="px-6 py-3 text-base">How It Works</Btn></a></div>
+ <div className="mt-4 text-sm text-slate-500">Run an organization? <Link to="/register-organization" className="text-indigo-600 font-semibold">Register Your Organization →</Link></div></div>
+ <Card className="shadow-xl !p-6"><div className="flex justify-between items-center mb-4"><b>Apollo Hospital · Live Queue</b><span className="text-xs text-emerald-600 font-semibold">● LIVE</span></div>
+ <div className="rounded-2xl bg-gradient-to-br from-indigo-600 to-violet-600 text-white p-6 text-center"><div className="text-xs opacity-80">YOUR TOKEN</div><div className="text-6xl font-extrabold my-1">A-104</div><div className="text-sm opacity-90">Now serving A-099</div></div>
+ <div className="grid grid-cols-3 gap-3 mt-4 text-center">{[['5','People ahead'],['18m','Est. wait'],['#6','Position']].map(([a,b])=><div key={b} className="bg-slate-50 rounded-xl p-3"><b className="text-lg">{a}</b><div className="text-xs text-slate-500">{b}</div></div>)}</div>
+ <div className="mt-4 h-2 bg-slate-100 rounded-full overflow-hidden"><div className="h-full w-2/3 bg-indigo-500 rounded-full"/></div></Card></div></section>
+ <section id="how" className="max-w-6xl mx-auto px-4 py-16"><h2 className="text-3xl font-bold text-center">How It Works</h2><div className="grid sm:grid-cols-2 lg:grid-cols-4 gap-5 mt-10">{steps.map(([i,t,d],n)=><Card key={t}><div className="text-3xl">{i}</div><div className="text-xs text-indigo-600 font-bold mt-2">STEP {n+1}</div><h3 className="font-bold mt-1">{t}</h3><p className="text-sm text-slate-600 mt-1">{d}</p></Card>)}</div></section>
+ <section id="features" className="bg-white border-y"><div className="max-w-6xl mx-auto px-4 py-16"><h2 className="text-3xl font-bold text-center">Features</h2><div className="grid sm:grid-cols-2 lg:grid-cols-3 gap-5 mt-10">{feats.map(([i,t,d])=><div key={t} className="p-5 rounded-2xl bg-slate-50"><div className="text-2xl">{i}</div><h3 className="font-bold mt-2">{t}</h3><p className="text-sm text-slate-600">{d}</p></div>)}</div>
+ <div className="flex flex-wrap justify-center gap-2 mt-10">{Object.values(TYPES).map(t=><span key={t.label} className="px-3 py-1.5 bg-indigo-50 text-indigo-700 rounded-full text-sm">{t.icon} {t.label}</span>)}</div></div></section>
+ <section id="about" className="max-w-3xl mx-auto px-4 py-16 text-center"><h2 className="text-3xl font-bold">About SmartQueue</h2><p className="mt-4 text-slate-600">SmartQueue is one platform for many organizations. Each organization gets its own isolated portal, staff, counters, queues and analytics, while customers use a single account everywhere.</p>
+ <div className="mt-6 text-sm bg-indigo-50 text-indigo-800 rounded-xl p-4">Demo logins (password <b>Demo@1234</b>): admin@smartqueue.com · staff@smartqueue.com · customer@smartqueue.com</div></section>
+ <footer className="border-t py-8 text-center text-sm text-slate-500 flex flex-col items-center gap-2"><Logo/>© 2026 SmartQueue</footer></div>}

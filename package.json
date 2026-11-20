@@ -1,0 +1,16 @@
+{
+  "name": "smartqueue-workspace",
+  "version": "1.0.0",
+  "description": "SmartQueue Workspace Root",
+  "scripts": {
+    "install:all": "npm --prefix smartqueue/server install && npm --prefix smartqueue/client install",
+    "seed": "npm --prefix smartqueue/server run seed",
+    "test": "npm --prefix smartqueue/server test",
+    "dev:server": "npm --prefix smartqueue/server run dev",
+    "dev:client": "npm --prefix smartqueue/client run dev",
+    "build:server": "npm --prefix smartqueue/server run build",
+    "build:client": "npm --prefix smartqueue/client run build",
+    "build": "npm run build:server && npm run build:client",
+    "start": "npm --prefix smartqueue/server start"
+  }
+}

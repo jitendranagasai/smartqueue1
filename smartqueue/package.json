@@ -1,0 +1,17 @@
+{
+  "name": "smartqueue",
+  "version": "1.0.0",
+  "description": "SmartQueue — Full-Stack Real-Time Queue Management Application",
+  "scripts": {
+    "install:all": "npm --prefix server install && npm --prefix client install",
+    "seed": "npm --prefix server run seed",
+    "test": "npm --prefix server test",
+    "dev:server": "npm --prefix server run dev",
+    "dev:client": "npm --prefix client run dev",
+    "build:server": "npm --prefix server run build",
+    "build:client": "npm --prefix client run build",
+    "build": "npm run build:server && npm run build:client",
+    "start": "npm --prefix server start"
+  },
+  "keywords": ["queue", "smartqueue", "express", "react", "mongodb", "socket.io", "typescript"]
+}
